@@ -32,10 +32,31 @@ const typeDefs = gql`
     LARGE
   }
 
+  # type Query {
+  #   launches: [Launch]!
+  #   launch(id: ID!): Launch
+  #   me: User
+  # }
+
   type Query {
-    launches: [Launch]!
+    launches( # replace the current launches query with this one.
+      """
+      The number of results to show. Must be >= 1. Default = 20
+      """
+      pageSize: Int
+      """
+      If you add a cursor here, it will only return results _after_ this cursor
+      """
+      after: String
+    ): LaunchConnection!
     launch(id: ID!): Launch
     me: User
+  }
+
+  type LaunchConnection {
+    cursor: String!
+    hasMore: Boolean!
+    launches: [Launch]!
   }
 
   type Mutation {
